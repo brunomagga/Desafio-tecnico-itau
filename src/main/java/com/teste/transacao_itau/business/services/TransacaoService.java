@@ -15,7 +15,7 @@ import java.util.List;
 @Slf4j
 public class TransacaoService {
 
-    private final List<TransacaoRequestDTO> listqTransacoes = new ArrayList<>();
+    private final List<TransacaoRequestDTO> listaTransacoes = new ArrayList<>();
 
     public void adcicionarTransacoes(TransacaoRequestDTO dto){
 
@@ -29,5 +29,18 @@ public class TransacaoService {
             log.error("O valor não deve ser menor que 0");
             throw new UnprocessableEntity("O valor não pode ser menor que 0");
         }
+        listaTransacoes.add(dto);
+    }
+
+    public void limparTransacoes(){
+        listaTransacoes.clear();
+    }
+
+    public List<TransacaoRequestDTO> buscarTransacoes(Integer intervaloBusca){
+
+        OffsetDateTime dataHoraIntervalo = OffsetDateTime.now().minusSeconds(intervaloBusca);
+
+        return listaTransacoes.stream().filter(transacao ->transacao.dataHora().
+                isAfter(dataHoraIntervalo)).toList();
     }
 }
